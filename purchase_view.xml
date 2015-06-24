@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+    	<!--Additional fields for Call for Bids in Purchases-->
+    	<record id="sevilla_purchase_requisition_form" model="ir.ui.view">
+			<field name="name">sevilla.purchase.requisition.form</field>
+			<field name="model">purchase.requisition</field>
+			<field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+			<field name="arch" type="xml">
+				<field name="multiple_rfq_per_supplier" position="after">
+					<field name="purpose" placeholder="Custom Field"/>
+					<field name="code_id" placeholder="Custom Field"/>
+					<field name="dest_location" placeholder="Custom Field"/>
+				</field>
+				<!--Reflected in line item-->
+				<field name="product_uom_id" position="after">
+					<field name="date_last"/>
+					<field name="actual_qty"/>
+					<field name="forecasted_qty"/>
+					<field name="qty_surrendered"/>
+					<field name="unit_price" invisible="1"/>
+					<field name="amount" invisible="1"/>
+					<field name="total_amount" sum="Subtotal" invisible="1"/>
+				</field>
+
+
+				<!--
+				<form string="Form Name" version="7.0">
+		            <header>		            
+		            	<button name="draft_status" string="Set to Draft" type="object" attrs="{'invisible': [('status','=','draft')]}"/>
+		                <button name="tender_cancel" string="Cancel" type="object" attrs="{'invisible': [('status','=','draft')]}"/>
+
+		                <button name="submit_head" string="Approve (To Unit Head)" type="object" class="oe_highlight" attrs="{'invisible': ['|',('status','!=','draft'),('state','=','cancelled')]}" />
+
+		                <button name="submit_custodian" string="Approve (To Asset Warehouse Custodian)" type="object" class="oe_highlight" attrs="{'invisible': ['|',('status','!=','head'),('state','=','cancelled')]}" />
+
+		                <button name="submit_purchasing" string="Approve (To Purchasing)" type="object" class="oe_highlight" attrs="{'invisible': ['|',('status','!=','custodian'),('state','=','cancelled')]}" />
+
+		                <field name="status" widget="statusbar"/>
+		            </header>
+		        </form>
+		    -->
+			</field>
+		</record>
+
+
+		<!--HR Purchase Requisition View-->
+
+		<!--
+		<record model="ir.actions.act_window" id="sevilla_action_purchase_requisition">
+	        <field name="name">Calls for Bids</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">purchase.requisition</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{"search_default_user_id":uid}</field>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to start a new Call for Bids process. 
+	          </p><p>
+	            A Call for Bids is a procedure for generating competing offers from
+	            different bidders. In the call for bids, you can record the
+	            products you need to buy and generate the creation of RfQs to
+	            suppliers. Once the bids have been registered, you can review and
+	            compare them and you can validate some and cancel others.
+	          </p>
+	        </field>
+	    </record>
+		-->
+
+		<record id="hr_purchase_requisition_tree" model="ir.ui.view">
+			<field name="name">purchase.requisition.tree</field>
+			<field name="model">purchase.requisition</field>
+			<field name="arch" type="xml">
+				<tree string="Title">
+					<field name="date_end"/>
+					<field name="name"/>
+					<field name="user_id"/>
+					
+					<field name="status" string="Routing Status"/>
+					<field name="state" string="PR Status"/>
+				</tree>
+			</field>
+		</record>
+
+	    <record id="hr_purchase_requisition_form" model="ir.ui.view">
+			<field name="name">purchase.requisition.form</field>
+			<field name="model">purchase.requisition</field>
+			<field name="priority" eval="20"/>
+			<field name="arch" type="xml">
+
+				<form string="Call for Bids">
+		            <header>              
+		                <button name="tender_cancel" attrs="{'invisible': [('status','!=','draft')]}" string="Cancel" type="object"/>
+		               
+		                <button name="submit_head" string="Approve (To Unit Head)" type="object" class="oe_highlight" attrs="{'invisible': [('status','!=','draft')]}" />
+
+		                <button name="submit_custodian" string="Approve (To Asset Warehouse Custodian)" type="object" class="oe_highlight" attrs="{'invisible': [('status','!=','head')]}" />
+
+		                <button name="submit_purchasing" string="Approve (To Purchasing)" type="object" class="oe_highlight" attrs="{'invisible': [('status','!=','custodian')]}" />
+		                
+
+		                <field name="status" widget="statusbar"/>
+		            </header>
+		            <sheet>
+		                <div class="oe_right oe_button_box" style="margin-top: 10px">
+		                    <button name="open_product_line" type="object" string="View Products Lines" attrs="{'invisible': [('exclusive', '=', 'exclusive')]}" groups="purchase.group_advance_bidding"/>
+		                    
+		                </div>
+		                <div class="pull-left">
+		                    <label for="name" class="oe_edit_only oe_inline"/>
+		                    <h1>
+		                        <field name="name" class="oe_inline" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                    </h1>
+		                </div>
+		                <div class="pull-left">
+		                    <label for="origin" class="oe_edit_only oe_inline"/>
+		                    <h1>
+		                        <label string="," attrs="{'invisible':[('origin','=',False)]}"/>
+		                        <field name="origin" class="oe_inline" placeholder="e.g. PO0025"/>
+		                    </h1>
+		                </div>
+		                <group>
+		                    <group>
+		                        <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'purchase_requisition.group_purchase_requisition_user', 'purchase.group_purchase_user', 'account.group_account_invoice']}" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="exclusive" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="multiple_rfq_per_supplier" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="purpose" placeholder="Custom Field"/>
+		                        <field name="code_id" placeholder="Custom Field"/>
+		                        <field name="dest_location" placeholder="Custom Field"/>
+		                    </group>
+		                    <group>
+		                        <field name="date_end" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="ordering_date" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="schedule_date" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="origin" placeholder="e.g. OP0025" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="picking_type_id" widget="selection" groups="stock.group_locations" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                        <field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                    </group>
+		                </group>
+		                <notebook>
+		                    <page string="Products">
+		                        <field name="line_ids" attrs="{'readonly': [('status','not in',('draft'))]}">
+		                            <tree string="Products" editable="bottom">
+		                                <field name="product_id" on_change="onchange_product_id(product_id,product_uom_id,parent.account_analytic_id,account_analytic_id,parent.schedule_date,schedule_date)"/>
+		                                <field name="product_qty"/>
+		                                <field name="product_uom_id" groups="product.group_uom"/>
+		                                <field name="schedule_date"/>
+		                                <field name="account_analytic_id" groups="purchase.group_analytic_accounting"/>
+		                                <field name="date_last"/>
+										<field name="actual_qty"/>
+										<field name="forecasted_qty"/>
+										<field name="qty_surrendered"/>
+										<field name="unit_price" invisible="1"/>
+										<field name="amount" invisible="1"/>
+										<field name="total_amount" sum="Subtotal" invisible="1"/>
+		                            </tree>
+		                            <form string="Products">
+		                                <group>
+		                                    <field name="product_id"/>
+		                                    <field name="product_qty"/>
+		                                    <field name="product_uom_id"/>
+		                                    <field name="date_last"/>
+											<field name="actual_qty"/>
+											<field name="forecasted_qty"/>
+											<field name="qty_surrendered"/>
+											<field name="unit_price" invisible="1"/>
+											<field name="amount" invisible="1"/>
+		                                    <field name="schedule_date"/>
+		                                    <field name="account_analytic_id" groups="purchase.group_analytic_accounting"/>
+		                                    <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+		                                </group>
+		                            </form>
+		                        </field>
+		                        
+		                        <separator string="Terms and Conditions"/>
+		                        <field name="description" attrs="{'readonly': [('status','not in',('draft'))]}"/>
+		                    </page>
+		                </notebook>
+		            </sheet>
+		            <div class="oe_chatter">
+		              <field name="message_follower_ids" widget="mail_followers"/>
+		              <field name="message_ids" widget="mail_thread"/>
+		            </div> 
+            </form>
+
+			</field>
+		</record>
+
+
+
+		<record model="ir.actions.act_window" id="sevilla_hr_purchase_action">
+		    <field name="name">Purchase Requisition</field>
+		    <field name="res_model">purchase.requisition</field>
+		    <field name="view_type">form</field>
+		    <field name="priority" eval="20"/>
+		    <field name="context">{"search_default_filter_purchase":1}</field>
+		    <field name="domain">[('user_id.id','=',uid)]</field>
+		    <field name="view_mode">tree,form</field>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="sevilla_hr_purchase_tree_view">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">tree</field>
+		    <field name="view_id" ref="hr_purchase_requisition_tree"/>
+		    <field name="act_window_id" ref="sevilla_hr_purchase_action"/>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="sevilla_hr_purchase_form_view">
+		    <field eval="2" name="sequence"/>
+		    <field name="view_mode">form</field>
+		    <field name="view_id" ref="hr_purchase_requisition_form"/>
+		    <field name="act_window_id" ref="sevilla_hr_purchase_action"/>
+		</record>
+
+
+		<!-- Additional Configuration of Company Code -->
+        <record id="sevilla_company_config_purchase_action" model="ir.actions.act_window">
+            <field name="name">sevilla.company.config.purchase.action</field>
+            <field name="res_model">sevilla.company</field>
+            <field name="view_mode">tree,form</field>       
+        </record>
+
+        <record id="sevilla_company_config_purchase_tree" model="ir.ui.view">
+            <field name="name">sevilla.company.config.purchase.tree</field>
+            <field name="model">sevilla.company</field>
+            <field name="arch" type="xml">
+                <tree string="Company Configuration" editable="top">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--Additional fields for Purchase Order in Purchases-->
+    	<record id="sevilla_purchase_order_form" model="ir.ui.view">
+			<field name="name">sevilla.purchase.order.form</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@string='Products']" position="after">
+					<separator string="Terms and Conditions"/>
+					<field name="terms_cond" nolabel="1" placeholder="Custom Field"/>
+				</xpath>
+
+				<field name="date_approve">
+					<field name="terms_cond"/>
+				</field>
+			</field>
+		</record>
+
+
+
+	    
+
+
+		<menuitem id="sevilla_hr_purchase_menu" name="Purchase Requisition" parent="hr.menu_hr_root" sequence="20"/>
+		<menuitem id="sevilla_hr_purchase_action_menu" 
+				parent="sevilla_hr_purchase_menu" 
+				name="Calls for Bids" 
+				action="sevilla_hr_purchase_action" 
+				sequence="10"/>
+
+		<menuitem action="sevilla_company_config_purchase_action" 
+            id="menu_sevilla_company_config_purchase" 
+            parent="purchase.menu_purchase_config_purchase" 
+            name="Company Configuration"
+            sequence="5"/>
+
+    </data>
+</openerp>

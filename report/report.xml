@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<!-- SCF Sale Order -->
+		<record id="scf_sale_order" model="ir.actions.report.xml">
+			<field name="name">SCF Sale Order</field>
+			<field name="report_name">scf.sale.order</field>
+			<field name="model">sale.order</field>	<!-- Report will appear on 'Print' menu for partners. -->
+			<field name="auto" eval="False"/> 
+			<field name="rml">sevilla/report/sale_order.prpt</field> 
+			<field name="is_pentaho_report" eval="True"/>
+			<field name="pentaho_report_model_id" ref="sale.model_sale_order"/>
+			<field name="pentaho_report_output_type">pdf</field>
+			<field name="report_type">pentaho</field>
+			<field name="pentaho_filename">sevilla/report/sale_order.prpt</field>
+			<field name="pentaho_load_file" eval="True"/>
+		</record>
+
+		<!-- SCF Purchase Order -->
+		<record id="scf_purchase_order" model="ir.actions.report.xml">
+			<field name="name">SCF Purchase Order</field>
+			<field name="report_name">scf.purchase.order</field>
+			<field name="model">purchase.order</field>	<!-- Report will appear on 'Print' menu for partners. -->
+			<field name="auto" eval="False"/> 
+			<field name="rml">sevilla/report/purchase_order.prpt</field> 
+			<field name="is_pentaho_report" eval="True"/>
+			<field name="pentaho_report_model_id" ref="purchase.model_purchase_order"/>
+			<field name="pentaho_report_output_type">pdf</field>
+			<field name="report_type">pentaho</field>
+			<field name="pentaho_filename">sevilla/report/purchase_order.prpt</field>
+			<field name="pentaho_load_file" eval="True"/>
+		</record>
+
+		<!-- SCF Voucher Statement (Accounting) Report  -->
+		<!--
+		<record id="scf_voucher_statement_report" model="ir.actions.report.xml">
+			<field name="name">SCF Voucher Statement</field>
+			<field name="report_name">scf.voucher.statement.report</field>
+			<field name="model">account.invoice</field>
+			<field name="pentaho_report_model_id" ref="account.model_account_invoice"/>
+			<field name="rml">sevilla/report/scf_voucher_statement.prpt</field> 
+			<field name="pentaho_filename">sevilla/report/scf_voucher_statement.prpt</field>
+			<field name="pentaho_report_output_type">pdf</field>
+			<field name="auto" eval="False"/> 
+			<field name="is_pentaho_report" eval="True"/>
+			<field name="pentaho_load_file" eval="True"/>
+		</record>	
+		-->
+
+	</data>
+</openerp>

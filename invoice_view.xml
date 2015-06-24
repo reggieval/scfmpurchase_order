@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+        <!-- Additional Fields to Customer Invoice Form -->
+        <record id="sevilla_customer_invoice_form" model="ir.ui.view">
+            <field name="name">sevilla.customer.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+            
+            <field name="partner_id" position="after">
+                <field name="code_id"  placeholder="Custom Field"/>
+            </field>
+
+            <field name="account_id" position="after">
+                <field name="scf_invoice_number" placeholder="Custom Field"/>
+                <field name="scf_dr_number" placeholder="Custom Field"/>
+                <field name="po_number" placeholder="Custom Field"/>
+                <field name="trip_ticket" placeholder="Custom Field"/>
+                <field name="total_case" placeholder="Custom Field"/>
+            </field>
+
+        </field>
+        </record>
+
+        <!-- Additional Fields to Supplier Invoice Form -->
+        <record id="sevilla_supplier_invoice_form" model="ir.ui.view">
+            <field name="name">sevilla.supplier.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+
+            <field name="partner_id" position="after">
+                <field name="code_id"  placeholder="Custom Field"/>
+            </field>
+            <!--
+            <field name="journal_id" position="after">
+                <field name="scf_voucher_number" placeholder="Custom Field"/>
+                <field name="scf_petty_cash_voucher" placeholder="Custom Field"/>
+                <field name="scf_cash_voucher_number" placeholder="Custom Field"/>
+                
+            </field>
+            -->
+        </field>
+        </record>
+
+
+        <!-- Additional Fields to Account Voucher (Pay button to Supplier Invoice) -->
+        <record id="sevilla_suppplier_account_voucher" model="ir.ui.view">
+            <field name="name">sevilla.supplier.account.voucher</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_dialog_form" />
+            <field name="arch" type="xml">
+
+            <field name="name" position="after">
+                <field name="scf_voucher_number" placeholder="Custom Field"/>
+                <field name="scf_petty_cash_voucher" placeholder="Custom Field"/>
+                <field name="scf_cash_voucher_number" placeholder="Custom Field"/>
+                <!--<field name="scf_receipt_counter" placeholder="Custom Field"/>-->
+            </field>
+
+            <field name="journal_id" position="after">
+                <field name="post_dated_check" placeholder="Custom Field"/>
+            </field>
+
+        </field>
+        </record>
+
+    </data>
+</openerp>
+
+

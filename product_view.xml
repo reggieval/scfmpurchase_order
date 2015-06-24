@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+    	<!-- Additional Fields to product_template form -->
+        <record id="sevilla_product_form" model="ir.ui.view">
+        <field name="name">sevilla.product.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+
+                <field name="tag_id" widget="many2many_tags" placeholder="Assigned Unit (Tag)" />
+            </field>
+
+            <field name="list_price" position="after">
+                <field name="classification_id" string="Classification" placeholder="Custom Field"/>
+            </field>
+
+            <field name="default_code" position="after">
+                <field name="gen_description" placeholder="Custom Field"/>
+            </field>
+
+            <field name="default_code" position="attributes">
+                <attribute name="string">Item Code</attribute>
+            </field>
+        </field>
+        </record>
+
+        <!--Additional field on product_template tree -->
+        <record id="sevilla_product_tree" model="ir.ui.view">
+            <field name="name">sevilla.product.tree</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="gen_description"/>
+                </field>
+            </field>
+        </record>
+        <!-- Additional Search criteria on product search -->
+        <record id="sevilla_product_search" model="ir.ui.view">
+            <field name="name">sevilla.product.search</field>
+            <field name="model">product.template</field>      
+            <field name="inherit_id" ref="product.product_template_search_view"/>   
+            <field name="arch" type="xml">
+                <search string="Product" position="inside">
+                    <field name="gen_description" string="Generic Description" filter_domain="[('gen_description','ilike',self)]"/>
+                </search>
+            </field>
+        </record>
+        
+
+        <!-- Additional Configuration of Classification -->
+        <record id="sevilla_classification_action" model="ir.actions.act_window">
+            <field name="name">sevilla.classification.action</field>
+            <field name="res_model">sevilla.classification</field>
+            <field name="view_mode">tree,form</field>       
+        </record>
+
+        <record id="sevilla_classification_tree" model="ir.ui.view">
+            <field name="name">sevilla.classification.tree</field>
+            <field name="model">sevilla.classification</field>
+            <field name="arch" type="xml">
+                <tree string="Classification" editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Additional Configuration of Assigned Unit (Tag) -->
+        <record id="sevilla_assigned_unit_action" model="ir.actions.act_window">
+            <field name="name">sevilla.assigned.unit.action</field>
+            <field name="res_model">sevilla.assigned.unit</field>
+            <field name="view_mode">tree,form</field>       
+        </record>
+
+        <record id="sevilla_assigned_unit_form" model="ir.ui.view">
+            <field name="name">sevilla.assigned.unit.form</field>
+            <field name="model">sevilla.assigned.unit</field>
+            <field name="arch" type="xml">
+                <form string="Assigned Unit (Tag)" version="8.0">
+                    <group string="Assigned Unit (Tag)">
+                        <field name="name"/>
+                        <!--<field name="description"/>-->
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="sevilla_assigned_unit_tree" model="ir.ui.view">
+            <field name="name">sevilla.assigned.unit.tree</field>
+            <field name="model">sevilla.assigned.unit</field>
+            <field name="arch" type="xml">
+                <tree string="Assigned Unit (Tag)" editable="top">
+                    <field name="name"/>
+                    <!--<field name="description"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <!-- Additional menu item on Configuration -->
+        <menuitem action="sevilla_classification_action" 
+            id="menu_sevilla_classification" 
+            parent="base.menu_base_config" 
+            name="Classification"/>
+
+        <menuitem action="sevilla_assigned_unit_action" 
+            id="menu_sevilla_assigned_unit" 
+            parent="base.menu_base_config" 
+            name="Unit Tags"/>
+
+    </data>
+</openerp>

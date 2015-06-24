@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <!-- Additional Fields to Sale Order -->
+        <record id="sevilla_sale_order_form" model="ir.ui.view">
+	        <field name="name">sevilla.sale.order.form</field>
+	        <field name="model">sale.order</field>
+	        <field name="inherit_id" ref="sale.view_order_form" />
+	        <field name="arch" type="xml">
+	        	<field name="partner_id" position="after">
+                	<field name="code_id" placeholder="Custom Field"/>
+            	</field>
+
+	        	<field name="partner_invoice_id" position="attributes">
+	        		<attribute name="string">Bill to</attribute>
+	        	</field>
+
+                <!--
+	        	<field name="partner_shipping_id" position="attributes">
+	        		<attribute name="string">Ship to</attribute>
+	        	</field>
+                -->
+
+                <field name="partner_shipping_id" position="replace">
+                    <field name="ship_to"/>
+                </field>
+
+	        	<field name="pricelist_id" position="after">
+	        		<field name="po_number" placeholder="Custom Field"/>
+	        		<field name="trip_ticket" placeholder="Custom Field"/>
+                    <field name="total_case" placeholder="Custom Field"/>
+	        	</field>
+
+
+                <!-- Additional to Sale Order Line -->
+                <xpath expr="//form/sheet/notebook/page[@string='Order Lines']/field[@name='order_line']/form/group/group/field[@name='price_unit']" position="after">
+                    <field name="discount_id" placeholder="Custom Field"/>
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook/page[@string='Order Lines']/field[@name='order_line']/tree/field[@name='discount']" position="before">
+                    <field name="discount_id"/>
+                </xpath>
+
+	        </field>
+    	</record>
+
+    	<!-- Additional Configuration of Company Code -->
+        <record id="sevilla_company_config_action" model="ir.actions.act_window">
+            <field name="name">sevilla.company.config.action</field>
+            <field name="res_model">sevilla.company</field>
+            <field name="view_mode">tree,form</field>       
+        </record>
+
+        <record id="sevilla_classification_tree" model="ir.ui.view">
+            <field name="name">sevilla.company.config.tree</field>
+            <field name="model">sevilla.company</field>
+            <field name="arch" type="xml">
+                <tree string="Company Configuration" editable="top">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- Additional Configuration for Type of Discounts -->
+        <record id="sevilla_discount_type_action" model="ir.actions.act_window">
+            <field name="name">sevilla.discount.type.action</field>
+            <field name="res_model">sevilla.discount.type</field>
+            <field name="view_mode">tree,form</field>       
+        </record>
+
+        <record id="sevilla_discount_type_tree" model="ir.ui.view">
+            <field name="name">sevilla.discount.type.tree</field>
+            <field name="model">sevilla.discount.type</field>
+            <field name="arch" type="xml">
+                <tree string="Type of Discount" editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--Configuration-->
+        <menuitem action="sevilla_company_config_action" 
+            id="menu_sevilla_company_config" 
+            parent="base.menu_base_config" 
+            name="Company Configuration"/>
+
+        <menuitem action="sevilla_discount_type_action" 
+            id="menu_sevilla_discount_type_config" 
+            parent="base.menu_base_config" 
+            name="Type of Discount"/>
+
+    </data>
+</openerp>

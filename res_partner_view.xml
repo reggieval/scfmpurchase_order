@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+    	<!-- Additional Fields to res_partner-->
+        <record id="sevilla_res_partner_form" model="ir.ui.view">
+        <field name="name">sevilla.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+          
+            <field name="title" position="after">
+                <field name="tin" placeholder="Custom Field"/>
+            </field>
+            <field name="website" position="after">
+                <field name="delivery_address" placeholder="Custom Field"/>
+                <field name="territory_id" string="Territory ID" placeholder="Custom Field"/>
+                <field name="trade_name" placeholder="Custom Field" string="Trade Name"/>
+            </field>
+        </field>
+        </record>
+
+
+        <!-- Additional Configuration of Territory ID -->
+        <record id="sevilla_territory_action" model="ir.actions.act_window">
+            <field name="name">sevilla.territory.action</field>
+            <field name="res_model">sevilla.territory</field>
+            <field name="view_mode">tree,form</field>       
+        </record>
+
+        <record id="sevilla_territory_tree" model="ir.ui.view">
+            <field name="name">sevilla.territory.tree</field>
+            <field name="model">sevilla.territory</field>
+            <field name="arch" type="xml">
+                <tree string="Territory ID" editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- Additional menu item on Configuration -->
+        <menuitem action="sevilla_territory_action" 
+            id="menu_sevilla_territory" 
+            parent="base.menu_base_config" 
+            name="Territory ID"/>
+
+    </data>
+</openerp>
